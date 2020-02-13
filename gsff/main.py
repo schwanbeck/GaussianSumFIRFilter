@@ -5,7 +5,7 @@
 (DOI: 10.1007/s12555-018-0938-4)
 Many thanks to Prof. Pak, who kindly provided his original Matlab-Code for the Gaussian Sum FIR Filter.
 
-https://github.com/schwanbeck/GSFF
+https://github.com/schwanbeck/GaussianSumFIRFilter
 
 Copyright (c) 2020 Julian Schwanbeck (julian.schwanbeck@med.uni-goettingen.de) and Jerôme
 

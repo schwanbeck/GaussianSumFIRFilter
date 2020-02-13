@@ -2,7 +2,7 @@
 
 """Examples for gsff.main
 
-https://github.com/schwanbeck/GSFF
+https://github.com/schwanbeck/GaussianSumFIRFilter
 
 Copyright (c) 2020 Julian Schwanbeck (julian.schwanbeck@med.uni-goettingen.de)
 Permission is hereby granted, free of charge, to any person obtaining a copy
