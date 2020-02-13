@@ -193,15 +193,15 @@ class GaussianSumFIR:
 
         ## Example
 
-        GaussianSumFIR.predict() takes as arguments the current measurement and a dictionary of settings.
+        GaussianSumFIR.predict() takes as arguments the current dictionary of settings.
         GaussianSumFIR.predict() uses the settings as returned by GaussianSumFIR.correct().
         For initial setup, use:
 
         settings_dict = {}
 
-        result, settings_dict = GaussianSumFIR.correct(measurement, **settings_dict)
+        filtered_result, settings_dict = GaussianSumFIR.correct(measurement, **settings_dict)
 
-        result, settings_dict = GaussianSumFIR.predict(measurement, **settings_dict)
+        prediction, settings_dict = GaussianSumFIR.predict(measurement, **settings_dict)
 
         :param mode: current used filters
         :type mode: int
