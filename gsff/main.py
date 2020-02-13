@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Original Idea and Equations from Pak, JM: Gaussian Sum FIR Filtering for 2D Target Tracking
-(DOI: 10.1007/s12555-018-0938-4)
-Many thanks to Prof. Pak, who kindly provided his original Matlab-Code for the Gaussian Sum FIR Filter.
+"""Original Idea and Equations from Pak, JM: Gaussian Sum FIR
+Filtering for 2D Target Tracking (DOI: 10.1007/s12555-018-0938-4)
+Many thanks to Prof. Pak, who kindly provided his original
+Matlab-Code for the Gaussian Sum FIR Filter.
 
 https://github.com/schwanbeck/GaussianSumFIRFilter
 
@@ -32,8 +33,8 @@ import numpy as np
 
 
 class GaussianSumFIR:
-    """Algorithm 1 from Pak, JM: Gaussian Sum FIR Filtering for 2D Target Tracking (DOI: 10.1007/s12555-018-0938-4)
-    with minor changes by Julian Schwanbeck and Jerôme
+    """Algorithm 1 from Pak, JM: Gaussian Sum FIR Filtering for 2D Target Tracking
+    (DOI: 10.1007/s12555-018-0938-4) with changes by Julian Schwanbeck and Jerôme
     """
 
     def __init__(self, delta_t, n_min=0, n_max=30, n_f=3,
@@ -55,7 +56,9 @@ class GaussianSumFIR:
             [0, 1, 0, 0, ],
         ])  # Equation (6)
 
-        Equations from Pak, JM: Gaussian Sum FIR Filtering for 2D Target Tracking (DOI: 10.1007/s12555-018-0938-4)
+        Equations from Pak, JM: Gaussian Sum FIR Filtering for 2D Target Tracking
+        (DOI: 10.1007/s12555-018-0938-4)
+
         :param delta_t: time delta
         :type delta_t: float
         :param n_min: lower end of window size minus step
@@ -79,7 +82,12 @@ class GaussianSumFIR:
         self.x_hat_array_length = x_hat_array_length
         self.n_f = n_f
         self.n_i = self.generate_n_i(n_min=n_min, n_max=n_max, n_f=self.n_f)
-        self.gains = [self.compute_lsf_gain(filter_size=i, a=a, c=c, delta_time=delta_t) for i in self.n_i]
+        self.gains = [self.compute_lsf_gain(
+            filter_size=i,
+            a=a,
+            c=c,
+            delta_time=delta_t
+        ) for i in self.n_i]
         self.inv_cov = inv_cov
 
     @staticmethod
@@ -87,7 +95,9 @@ class GaussianSumFIR:
         """Calculate the filter sizes for the given minimum, maximum, and number of steps.
         See Equation (17).
 
-        Equations from Pak, JM: Gaussian Sum FIR Filtering for 2D Target Tracking (DOI: 10.1007/s12555-018-0938-4)
+        Equations from Pak, JM: Gaussian Sum FIR Filtering for 2D Target Tracking
+        (DOI: 10.1007/s12555-018-0938-4)
+
         :param n_min: minimum filter horizon size minus step size
         :type n_min: int
         :param n_max: maximal filter horizon size
@@ -110,7 +120,9 @@ class GaussianSumFIR:
         """ Compute the least square filter gain
         See Equation (14) and (13)
 
-        Equations from Pak, JM: Gaussian Sum FIR Filtering for 2D Target Tracking (DOI: 10.1007/s12555-018-0938-4)
+        Equations from Pak, JM: Gaussian Sum FIR Filtering for 2D Target Tracking
+        (DOI: 10.1007/s12555-018-0938-4)
+
         :param filter_size: filter horizon size
         :type filter_size: int
         :param delta_time: time delta
@@ -152,7 +164,9 @@ class GaussianSumFIR:
         """Calculate prediction of lsf
         See Equation (12)
 
-        Equations from Pak, JM: Gaussian Sum FIR Filtering for 2D Target Tracking (DOI: 10.1007/s12555-018-0938-4)
+        Equations from Pak, JM: Gaussian Sum FIR Filtering for 2D Target Tracking
+        (DOI: 10.1007/s12555-018-0938-4)
+
         :param horizon_size: Current filter horizon size
         :type horizon_size: int
         :param filter_gain: Filter gain as calculated by compute_lsf_gain()
@@ -161,15 +175,21 @@ class GaussianSumFIR:
         :rtype: np.array
         """
         y_mat = measurements[-horizon_size:]
-        y_mat = [cur_item for cur_tuple in y_mat for cur_item in cur_tuple]  # linearised to filter_size x 1
-        # y_mat = y_mat.reshape(-1)
-        return np.dot(filter_gain, y_mat)  # gain_i * y_mat -> (4, 20) * (20, 1) -> (4, 1) at filter size of 10
+
+        # linearised to filter_size x 1
+        y_mat = [cur_item for cur_tuple in y_mat for cur_item in cur_tuple]
+        # y_mat = y_mat.reshape(-1)  # the same but somewhat slower
+
+        # gain_i * y_mat -> (4, 20) * (20, 1) -> (4, 1) at filter size of 10
+        return np.dot(filter_gain, y_mat)
 
     def likelihood_calc(self, measurement, y_hat):
         """Calculate likelihood for current filter
         See Equation (20)
 
-        Equations from Pak, JM: Gaussian Sum FIR Filtering for 2D Target Tracking (DOI: 10.1007/s12555-018-0938-4)
+        Equations from Pak, JM: Gaussian Sum FIR Filtering for 2D Target Tracking
+        (DOI: 10.1007/s12555-018-0938-4)
+
         :param measurement: current measurement
         :param y_hat: prediction for current measurement
         :return: likelihood
@@ -201,7 +221,7 @@ class GaussianSumFIR:
 
         filtered_result, settings_dict = GaussianSumFIR.correct(measurement, **settings_dict)
 
-        prediction, settings_dict = GaussianSumFIR.predict(measurement, **settings_dict)
+        prediction, settings_dict = GaussianSumFIR.predict(**settings_dict)
 
         :param mode: current used filters
         :type mode: int
@@ -218,7 +238,11 @@ class GaussianSumFIR:
             horizon = self.n_i[filter_index]
             gain = self.gains[filter_index]
 
-            fir_x_hat = self.lsff_calc(horizon_size=horizon, filter_gain=gain, measurements=previous_measurements)
+            fir_x_hat = self.lsff_calc(
+                horizon_size=horizon,
+                filter_gain=gain,
+                measurements=previous_measurements
+            )
 
             x_hat_array[:, filter_index] = fir_x_hat[:self.x_hat_array_length]
 
@@ -237,15 +261,16 @@ class GaussianSumFIR:
 
         ## Example
 
-        GaussianSumFIR.correct() takes as arguments the current measurement and a dictionary of settings.
+        GaussianSumFIR.correct() takes as arguments the current measurement
+        and a dictionary of settings.
         GaussianSumFIR.correct() creates it's own settings upon first use.
         For initial setup, use:
 
         settings_dict = {}  # initialise with empty dict
 
-        result, settings_dict = GaussianSumFIR.correct(measurement, **settings_dict)
+        filtered_result, settings_dict = GaussianSumFIR.correct(measurement, **settings_dict)
 
-        result, settings_dict = GaussianSumFIR.predict(measurement, **settings_dict)
+        prediction, settings_dict = GaussianSumFIR.predict(**settings_dict)
 
         :param measurement: new measurement
         :param mode: current used filters
@@ -272,7 +297,8 @@ class GaussianSumFIR:
 
         if new_mode:
             likelihood_array = [self.likelihood_minimum] * mode  # initialise with minimum value
-            x_hat_array = np.zeros((self.x_hat_array_length, mode))  # 4 because of H_Ni / we just need 2 though
+            # 4 because of H_Ni / we just need 2 though
+            x_hat_array = np.zeros((self.x_hat_array_length, mode))
             weight_array = 1 / mode * np.ones(mode)
             # call predict to update x_hat_array
             kwargs.update({
