@@ -193,7 +193,7 @@ class GaussianSumFIR:
 
         ## Example
 
-        GaussianSumFIR.predict() takes as arguments the current measurement and a dictionary of settings.
+        GaussianSumFIR.predict() takes as arguments the current dictionary of settings.
         GaussianSumFIR.predict() uses the settings as returned by GaussianSumFIR.correct().
         For initial setup, use:
 
