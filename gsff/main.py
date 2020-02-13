@@ -189,7 +189,19 @@ class GaussianSumFIR:
         return likelihood
 
     def predict(self, mode=0, previous_measurements=None, weight_array=None, x_hat_array=None, **kwargs):
-        """Predict result based on previous weights
+        """Predict result based on previous weights.
+
+        ## Example
+
+        GaussianSumFIR.predict() takes as arguments the current measurement and a dictionary of settings.
+        GaussianSumFIR.predict() uses the settings as returned by GaussianSumFIR.correct().
+        For initial setup, use:
+
+        settings_dict = {}
+
+        result, settings_dict = GaussianSumFIR.correct(measurement, **settings_dict)
+
+        result, settings_dict = GaussianSumFIR.predict(measurement, **settings_dict)
 
         :param mode: current used filters
         :type mode: int
@@ -221,7 +233,19 @@ class GaussianSumFIR:
 
     def correct(self, measurement, mode=0, previous_measurements=None, weight_array=None,
                 likelihood_array=None, x_hat_array=None, **kwargs):
-        """Correct signal based on prediction and current input
+        """Correct signal based on prediction and current input.
+
+        ## Example
+
+        GaussianSumFIR.correct() takes as arguments the current measurement and a dictionary of settings.
+        GaussianSumFIR.correct() creates it's own settings upon first use.
+        For initial setup, use:
+
+        settings_dict = {}  # initialise with empty dict
+
+        result, settings_dict = GaussianSumFIR.correct(measurement, **settings_dict)
+
+        result, settings_dict = GaussianSumFIR.predict(measurement, **settings_dict)
 
         :param measurement: new measurement
         :param mode: current used filters
